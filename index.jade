@@ -12,6 +12,8 @@
   each article, slug in public.articles._data
    
       a( class="titleLink"  href="/articles/#{ slug }") <h2> #{ article.title } </h2>
+      .titlePic
+        img(src="#{ article.pic }")
 
       != excerpt(partial("articles/" + slug ))
 

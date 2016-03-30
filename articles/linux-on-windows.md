@@ -2,6 +2,7 @@
 <!-- more -->
 Apparently you will soon be able to use Ubuntu inside Windows 10. That is really cool. I dual boot Windows and Linux right now and I hate having to switch between them. This could be a dream come true.
 <!-- more -->
+![large](/img/linuxWin.png)
 here. put that in your report!" and "i may have found a way out of here. man's gotta know his limitations. man's gotta know his limitations. what you have to ask yourself is, do i feel lucky. 
 
 `well do ya' punk? when a naked man's chasing a woman through an alley with a butcher knife and a hard-on`
