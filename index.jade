@@ -1,7 +1,10 @@
+- function excerpt(content) {
+  - if(content.indexOf("<!-- more -->") == -1) return content;
+  - else return content.split("<!-- more -->")[1];
+- }
 
-
-ul
   each article, slug in public.articles._data
-    li
-      a(href="/articles/#{ slug }") #{ article.title }
+   
+      a( class="titleLink"  href="/articles/#{ slug }") <h2> #{ article.title } </h2>
 
+      != excerpt(partial("articles/" + slug ))
