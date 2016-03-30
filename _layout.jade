@@ -4,6 +4,13 @@ html
     link(rel="stylesheet", href="/main.css")
   body
     != partial("_shared/nav")
-    != yield
+    #header.main_header
+      .vertical
+        .inner 
+          h1 Nick's Blog
+          br
+          h2 This is F'ing Awesome
+    .content
+      != yield
     footer
       != partial("_shared/nav")

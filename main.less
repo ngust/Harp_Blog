@@ -11,6 +11,7 @@ body {
   max-width: 35em;
 }
 
+
 h1 {
   font-size: 3em;
   font-weight: 500;
@@ -69,4 +70,47 @@ pre {
 code {
   font-family: "Source Code Pro", Menlo, monospace;
   font-size: 90%;
+}
+
+#header {
+    background-image: url(img/background.JPG);
+    background-size: cover;
+    width: 100%;
+    position:absolute;
+    left:0;
+    right:0;
+}
+.main_header {
+    position: relative;
+    display: table;
+    height: 400px;
+    margin-bottom: 5rem;
+    text-align: center;
+    background: #222 no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    .inner {
+        h1 {
+            color: @blue;
+            padding: 6px 10px 8px 10px;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        h2 {
+            color: @blue;
+            padding: 6px 10px 8px 10px;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.7);
+        }
+    }
+}
+
+.vertical {
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+
+.content {
+    margin-top: 420px;
 }
