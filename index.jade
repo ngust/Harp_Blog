@@ -1,0 +1,20 @@
+- function excerpt(content) {
+  - if(content.indexOf("<!-- more -->") == -1) return content;
+  - else return content.split("<!-- more -->")[1];
+- }
+#header.main_header
+      .vertical
+        .inner 
+          h1 Nick's Blog
+          br
+          h2 This is F'ing Awesome
+.content          
+  each article, slug in public.articles._data
+   
+      a( class="titleLink"  href="/articles/#{ slug }") <h2> #{ article.title } </h2>
+      h6 #{ article.date }
+      .titleHat
+        <a href="/articles/#{ slug }"><img src="#{ article.pic }"></a>
+
+      != excerpt(partial("articles/" + slug ))
+

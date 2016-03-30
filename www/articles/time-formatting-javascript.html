@@ -1,0 +1,45 @@
+<!DOCTYPE html><html><head><link rel="stylesheet" href="/main.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></head><body><nav><a href="/">Home</a><a href="/about">About</a></nav><h2>Formatting Dates in Javascript</h2><!-- more -->
+<p>At some point everyone will have to format dates in a web application.  I found some really cool tools for doing that.  They are Moment.js and Pikaday.js.</p>
+<!-- more -->
+<p><img src="/img/backFuture.jpg" alt="large"></p>
+<h3>Moment.js</h3><p>Before learning about moment I manually formatted dates in javascript.  Here&#39;s an example:</p>
+<pre><code>var d = new Date();
+datetext = d.getHours()+&quot;:&quot;+d.getMinutes()+&quot;:&quot;+d.    getSeconds();
+// this part fixes the leading zeroes
+var parts = datetext.split(&#39;:&#39;);
+  if (parts[0].length == 1) parts[0] = &#39;0&#39; + parts[0];
+  if (parts[1].length == 1) parts[1] = &#39;0&#39; + parts[1];
+  if (parts[2].length == 1) parts[2] = &#39;0&#39; + parts[2];
+  var date = parts[0] + &quot;:&quot; + parts[1] + &quot;:&quot; +     parts[2];
+</code></pre><p>That&#39;s about as fun as it looks.  Moment does all of that for us in a really easy way.</p>
+<p>Moment can be installed in node via NPM or added directly to your frontend code with a link.  You can download the moment source code here, <a href="http://momentjs.com/">Momentjs</a>.  On my project I&#39;m using Jade and included moment like this:</p>
+<pre><code>script(src=&quot;http://momentjs.com/downloads/moment.min.js&quot;)
+</code></pre><p>In the example above I wrote some code to translate the output of the javascript date function:</p>
+<pre><code>Wed Mar 30 2016 14:20:28 GMT-0700 (PDT)
+</code></pre><p>into this:</p>
+<pre><code>14:20:28
+</code></pre><p>With Moment you can accomplish the same thing with one line of code.  Like so:</p>
+<pre><code>var date = moment(d).format(&#39;HH:mm:ss&#39;)
+14:20:28
+</code></pre><p>Moment can work with dates and times.  To format the date you simply change the format code like this:</p>
+<pre><code>var date = moment(d).format(&#39;MMM DD, YYYY&#39;)); 
+Mar 30, 2016
+</code></pre><p>Moment is essential for formatting times and dates.</p>
+<h3>Pikaday.js</h3><p>Pikaday gives you one of those fancy calendars to pick a date on a web form.  It actually uses moment too.  </p>
+<p>There are lots of scripts out there to accomplish this but I find Pikaday easy to use and configure.  Actually the default is really nice.  See a live demo, <a href="https://dbushell.github.io/Pikaday/">here</a>.</p>
+<p>Pikaday worked well on a project where the user needed to enter a specifically formatted date to be used in a query.  See example below:</p>
+<p><img src="/img/pikaday.png" alt="large"></p>
+<p>Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.</p>
+<p>To include Pikaday you need the source code and their custom CSS.  The two can be included in Jade like so:</p>
+<pre><code>script(src=&quot;https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js&quot;)
+link(rel=&#39;stylesheet&#39;, href=&#39;http://dbushell.github.io/Pikaday/css/pikaday.css&#39;)
+</code></pre><p>Then Pikaday is insanely easy to set up.  It uses a Jquery selector to bind to your form.</p>
+<pre><code>// Fancy Calendar Date Picker
+  var picker = new Pikaday({ 
+        field: $(&#39;#GDTDT&#39;)[0],
+        format: &#39;YYYYMMDD&#39;
+    });
+</code></pre><p>In my case the form has the ID &#39;#GDTDT&#39;.  That&#39;s it.  Now when the user clicks on the form the calendar will pop up and allow then to select a date.</p>
+<p>The format is determined by the &quot;format&quot; option for Pickaday.  It uses Moment.js for the formatting, check out the moment page for details, <a href="http://momentjs.com/">Momentjs</a>.</p>
+<p>Pikaday has tons of options for formatting the calendar.  You can pick a custom start date, minimum and maxuimum dates, disable weekends, etc.  Full options listed on the github page, <a href="https://github.com/dbushell/Pikaday"> Pikaday Github</a>.</p>
+<p>With these two tools you will master the use of dates in javascript.  Have fun.</p><footer id="footer-list"><p>Powered by <a target="_blank" href="http://harpjs.com">Harp.js</a>, <a target="_blank" href="http://jade-lang.com">jade</a> and <a target="_blank" href="http://lesscss.org">Less</a>.</p><ul><li><a target="_blank" href="https://github.com/ngust"><span class="fa fa-github"></a></span></li><li><a target="_blank" href="https://www.linkedin.com/in/nicholasgust"><span class="fa fa-linkedin"></a></span></li><li><a target="_blank" href="https://twitter.com/loopylettuce"><span class="fa fa-twitter"></a></span></li></ul></footer></body></html>

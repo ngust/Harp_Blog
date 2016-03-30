@@ -1,0 +1,20 @@
+doctype
+html
+  head
+    link(rel="stylesheet", href="/main.css")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
+  body
+    != partial("_shared/nav")
+      != yield
+    footer(id="footer-list")
+      p Powered by <a target="_blank" href="http://harpjs.com">Harp.js</a>, <a target="_blank" href="http://jade-lang.com">jade</a> and <a target="_blank" href="http://lesscss.org">Less</a>.
+      ul
+        li
+          <a target="_blank" href="https://github.com/ngust">
+          span(class="fa fa-github")</a>
+        li
+          <a target="_blank" href="https://www.linkedin.com/in/nicholasgust">
+          span(class="fa fa-linkedin")</a>
+        li
+          <a target="_blank" href="https://twitter.com/loopylettuce">
+          span(class="fa fa-twitter")</a>
