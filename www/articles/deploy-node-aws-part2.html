@@ -1,0 +1,59 @@
+<!DOCTYPE html><html><head><link rel="stylesheet" href="/main.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="shortcut icon" type="image/png" href="/favicon.png"></head><body><nav><a href="/">Home</a><a href="/about">About</a></nav><h2>Deployment of a Node.js project on AWS - Part 2</h2><!-- more -->
+<p>This is continuation of a story about the deployment of a Node.js app that I developed with a partner.  This app is deployed on AWS and we used Dokku to deploy the app.  Dokku provides containerization via Docker, as well as Git integration and an nginx server.
+<!-- more -->
+<img src="/img/DevOps2/deploy.jpg" alt="large"></p>
+<p>Following up on <a href="/articles/deploy-node-aws">Part 1</a>. I&#39;ll show you the steps involved for the rest of our deployment.  We will set up Dokku, Mongodb, the domain, DNS servers and make sure we have all the right ports allowed.</p>
+<p>We&#39;ll start with Dokku.  First we have to log into the remote server.  For me the command looks like this:</p>
+<p>The following ssh command will allow us to connect:</p>
+<pre><code>ssh -i &quot;Nick.pem&quot; ubuntu@XXX.XX.158.156
+</code></pre><p>On the remote machine we need to run the install script for dokku.  That is done using the wget command to download the script and then execute it.  The command is:</p>
+<pre><code>wget https://raw.githubusercontent.com/dokku/dokku/v0.4.14/bootstrap.sh
+</code></pre><p>After that you need to run the following command to execute the script:</p>
+<pre><code>sudo DOKKU_TAG=v0.4.14 bash bootstrap.sh
+</code></pre><p>That will install Dokku and its dependencies from the Ubuntu APT repositories.  Now we can set up the app.</p>
+<p>This will create your app:</p>
+<pre><code>dokku apps:create claims
+</code></pre><p>Next create the mongo database:</p>
+<pre><code>dokku mongo:create mongo_claims
+</code></pre><p>Then link the database and app:</p>
+<pre><code>dokku mongo:link mongo_claims claims
+</code></pre><p>So now we have an app called &quot;claims&quot; and a mongo database named &quot;mongo_claims&quot; and they are linked together.  You can confirm the names by running <code>dokku mongo:list</code> to check the database and <code>dokku apps</code> to list your apps.</p>
+<p>Great Dokku is set up now we have to deploy our app.  This is done using git and a special Dokku repository.  The repo is already set up on the remote server as part of the app build we just have to connect to it from our dev machine.</p>
+<p>The command is like this:</p>
+<pre><code>git remote add dokku dokku@xx.xx.158.156:claims
+</code></pre><p>I blocked out part of my IP for obvious reasons.  The app&#39;s name is &quot;claims&quot;.  This command must be run from the root folder of your app, the same as other git commands.</p>
+<p>Once we&#39;re ready to deploy it is as simple as a git push.<br>Like so:</p>
+<pre><code>git push dokku master
+</code></pre><p>You will git all kinds of output in the terminal.  Dokku will tell you all the things that it is doing and provide feedback.  It takes about 5 minutes so sit back and grab some popcorn.</p>
+<p>Dokku will give you the ports for the docker instances of the app and for nginx.  If you plug your IP address into your browser and add the nginx port to the end the app should be live.</p>
+<p>OK lets set up the domain name and link it to the app.  We did everything through AWS just out of convince but you can buy a domain anywhere.  Amazon&#39;s domain services are called Route 53.  Apparently the service name (Route 53) is a reference to TCP or UDP port 53, where DNS server requests are addressed.  </p>
+<p><img src="/img/DevOps2/r53.png" alt="large"></p>
+<p>On the Route 53 home page there is a search area for domain names.  Just type in your desired name and hit &quot;Check&quot;.  You will be brought to a page that lists the prices and availability for your chosen name.  We decided on MappingClaims.com since it was available.  Amazon&#39;s price of $12/yr is reasonable.</p>
+<p>Once purchased you have to fill out your name and address for the WHOIS info.  Make sure you make that info private or you could be a victim of identity theft.</p>
+<p>After filling out all the domain stuff you will be directed back to the main Route 53 page.  From there clink on the &quot;hosted zones&quot; link to configure your domain. All you have to do here is change the ip address that I indicated with the arrow below.</p>
+<p><img src="/img/DevOps2/domain.png" alt="large"></p>
+<p>Once you enter your IP address click &quot;Save Record Set&quot; and you are good to go.  It might take a few minutes for the domain to update but soon after you should be able to connect to the site.  Enter your domain name in a browser followed by the nginx port number (ie mappingclaims.com:37275).</p>
+<p>You will have to open up a port on your instance to allow access.  On the AWS console navigate to the EC2 panel.  Then find the network and security section on the left side scroll menu.  Click on &quot;Security Groups&quot;.  Then click on your instance and select the inbound tab in the bottom section.  Then click &quot;Edit&quot;.  You should see a window like the one below.  Fill in your port number instead of mine.</p>
+<p><img src="/img/DevOps2/2ports.png" alt="large"></p>
+<p>At this point we are looking pretty good.  The app is on a real domain name and works.  It doen&#39;t have data in the mongo database yet, lets take care of that now.  This is a bit complicated but we&#39;ll get through it.</p>
+<p>The data that we used for this mapping app is geospatial in nature and requires a special index in mongo.  The way to import that data with Dokku goes like this.  First dump the dev database, then transfer the dump file to the server.  On the server import the dump file.</p>
+<p>This command will create a BSON dump file:</p>
+<pre><code>mongodump --db claims --collection docs4 --out /location
+</code></pre><p>In the above case our local database is named &quot;claims&quot; and the collection is &quot;docs4&quot;.  The location can be wherever you want the file to end up.</p>
+<p>To upload the file to your server you can use SCP.  My command looks like this:</p>
+<pre><code>scp -i &quot;Nick.pem&quot; docs4.bson ubuntu@xx.xx.158.156:docs4.bson
+</code></pre><p>Now that the file is on the server you have to tweak it a bit.  I learned this through trial and error.  Mongo on Dokku will only accept dump files in a tar format.  To create the proper file we log into the server and create a directory called &quot;dump&quot;.  Move the bson file inside the folder.  After that you have to turn the folder into a tarball.  </p>
+<p>The tar command is:</p>
+<pre><code>tar -cvf dump.tar dump
+</code></pre><p>Now all we have to do is import it into mongo.  Dokku has a bunch of mongo tools that you can see by running <code>dokku help</code>.  We&#39;re going to use the <code>mongo:import</code> command.  </p>
+<p>The import command looks like this:</p>
+<pre><code>dokku mongo:import mongo_claims dump.tar
+</code></pre><p>You will get a progress indicator and some feedback.  It should look something like this:</p>
+<pre><code>2016-03-05T18:04:17.255+0000 building a list of collections to     restore from/tmp/tmp.6S378QKhJR/dump dir2016-03-    05T18:04:17.270+0000 restoring mongo_claims.docs4 from/tmp/    tmp.6S378QKhJR/dump/docs4.bson2016-03-    05T18:04:20.729+0000[############............] mongo_claims.    docs422.3 MB/44.2 MB(50.3%)2016-03-    05T18:04:22.821+0000[########################] mongo_claims.    docs444.2 MB/44.2 MB(100.0%)2016-03-05T18:04:22.822+0000 no indexes     to restore2016-03-05T18:04:22.897+0000 finished restoring mongo_claims.docs4(41512 documents)2016-03-05T18:04:22.897+0000 done
+</code></pre><p>At this point we are pretty much set.  The app is deployed, the database is set up and we have a domain.  Just one last thing to take care of.  Let&#39;s drop that port number from the site address.</p>
+<p>It took me a while to figure this out, there&#39;s not much on the internet about this issue.  I messed around with the Ubuntu iptables with no luck.  I turns out that Dokku has a command to change the nginx port.</p>
+<p>It goes like this:</p>
+<pre><code>dokku config:set claims DOKKU_NGINX_PORT=80
+</code></pre><p>Then you have to open up the port in Ubuntu&#39;s firewall:</p>
+<pre><code>sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+</code></pre><p>That&#39;s it we&#39;re all done.  This is the process that I used to deploy my Node.js app on AWS.  Hopefully it worked for you too.</p><footer id="footer-list"><p>Powered by <a target="_blank" href="http://harpjs.com">Harp.js</a>, <a target="_blank" href="http://jade-lang.com">jade</a> and <a target="_blank" href="http://lesscss.org">Less</a>.</p><ul><li><a target="_blank" href="https://github.com/ngust"><span class="fa fa-github"></a></span></li><li><a target="_blank" href="https://www.linkedin.com/in/nicholasgust"><span class="fa fa-linkedin"></a></span></li><li><a target="_blank" href="https://twitter.com/loopylettuce"><span class="fa fa-twitter"></a></span></li></ul></footer></body></html>
