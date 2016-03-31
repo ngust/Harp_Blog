@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><link rel="stylesheet" href="/main.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></head><body><nav><a href="/">Home</a><a href="/about">About</a></nav><h2>Formatting Dates in Javascript</h2><!-- more -->
+<!DOCTYPE html><html><head><link rel="stylesheet" href="/main.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="shortcut icon" type="image/png" href="/favicon.png"></head><body><nav><a href="/">Home</a><a href="/about">About</a></nav><h2>Formatting Dates in Javascript</h2><!-- more -->
 <p>At some point everyone will have to format dates in a web application.  I found some really cool tools for doing that.  They are Moment.js and Pikaday.js.</p>
 <!-- more -->
 <p><img src="/img/backFuture.jpg" alt="large"></p>
@@ -29,23 +29,7 @@ Mar 30, 2016
 <p>There are lots of scripts out there to accomplish this but I find Pikaday easy to use and configure.  Actually the default is really nice.  See a live demo, <a href="https://dbushell.github.io/Pikaday/">here</a>.</p>
 <p>Pikaday worked well on a project where the user needed to enter a specifically formatted date to be used in a query.  See example below:</p>
 <p><img src="/img/pikaday.png" alt="large"></p>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
-<h1>Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.</h1><p>Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.  Pikaday spits out the results into the form and you can do whatever you want with it.</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>gh-pages</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+<p>Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.  Pikaday spits out the results into the form and you can do whatever you want with it.</p>
 <p>To include Pikaday you need the source code and their custom CSS.  The two can be included in Jade like so:</p>
 <pre><code>script(src=&quot;https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js&quot;)
 link(rel=&#39;stylesheet&#39;, href=&#39;http://dbushell.github.io/Pikaday/css/pikaday.css&#39;)

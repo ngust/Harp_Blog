@@ -54,11 +54,7 @@ Pikaday worked well on a project where the user needed to enter a specifically f
 
 ![large](/img/pikaday.png)
 
-<<<<<<< HEAD
-Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.
-=======
 Instead of using form validation and shaming the user for entering the wrong date, we took a way the typing.  When they pick a date from the calendar it is already in the right format.  Pikaday spits out the results into the form and you can do whatever you want with it.
->>>>>>> gh-pages
 
 To include Pikaday you need the source code and their custom CSS.  The two can be included in Jade like so:
 

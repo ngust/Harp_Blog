@@ -1,12 +1,22 @@
 {
-  "linux-on-windows": {
+   "linux-on-windows": {
     "title": "Linux on Windows 10",
     "pic":"/img/linuxWin.png",
-    "date": "March 31, 2016"
+    "date": "March 30, 2016"
   },
   "time-formatting-javascript": {
     "title": "Formatting Time in Javascript",
     "pic": "/img/backFuture.jpg",
-    "date": "March 30, 2016"
+    "date": "March 29, 2016"
+  },
+  "deploy-node-aws-part2": {
+    "title": "Deployment of a Node.js project on AWS - Part 2",
+    "pic":"/img/DevOps2/deploy.jpg",
+    "date": "March 18, 2016"
+  },
+    "deploy-node-aws": {
+    "title": "Deployment of a Node.js project on AWS",
+    "pic":"/img/DevOpsAWS/javascriptCode.png",
+    "date": "March 11, 2016"
   }
 }
