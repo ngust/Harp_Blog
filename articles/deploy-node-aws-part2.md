@@ -99,7 +99,14 @@ The import command looks like this:
 
 You will get a progress indicator and some feedback.  It should look something like this:
 
-    2016-03-05T18:04:17.255+0000 building a list of collections to     restore from/tmp/tmp.6S378QKhJR/dump dir2016-03-    05T18:04:17.270+0000 restoring mongo_claims.docs4 from/tmp/    tmp.6S378QKhJR/dump/docs4.bson2016-03-    05T18:04:20.729+0000[############............] mongo_claims.    docs422.3 MB/44.2 MB(50.3%)2016-03-    05T18:04:22.821+0000[########################] mongo_claims.    docs444.2 MB/44.2 MB(100.0%)2016-03-05T18:04:22.822+0000 no indexes     to restore2016-03-05T18:04:22.897+0000 finished restoring mongo_claims.docs4(41512 documents)2016-03-05T18:04:22.897+0000 done
+    $dokku mongo:import mongo_claims < dump.tar
+    2016-03-05T18:04:17.255+0000    building a list of collections to restore from /tmp/tmp.6S378QKhJR/dump dir
+    2016-03-05T18:04:17.270+0000    restoring mongo_claims.docs4 from /tmp/tmp.6S378QKhJR/dump/docs4.bson
+    2016-03-05T18:04:20.729+0000    [############............]  mongo_claims.docs4  22.3 MB/44.2 MB  (50.3%)
+    2016-03-05T18:04:22.821+0000    [########################]  mongo_claims.docs4  44.2 MB/44.2 MB  (100.0%)
+    2016-03-05T18:04:22.822+0000    no indexes to restore
+    2016-03-05T18:04:22.897+0000    finished restoring mongo_claims.docs4 (41512 documents)
+    2016-03-05T18:04:22.897+0000    done
 
 At this point we are pretty much set.  The app is deployed, the database is set up and we have a domain.  Just one last thing to take care of.  Let's drop that port number from the site address.
 
