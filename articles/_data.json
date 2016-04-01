@@ -1,4 +1,9 @@
 {
+  "linux-tools-conky": {
+    "title": "Linux Tools - Conky",
+    "pic":"/img/Conky/conky_bubbles_crop.jpg",
+    "date": "April 1, 2016"
+  },
    "linux-on-windows": {
     "title": "Linux on Windows 10",
     "pic":"/img/linuxWin.png",

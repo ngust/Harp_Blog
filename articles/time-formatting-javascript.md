@@ -2,6 +2,7 @@
 <!-- more -->
 At some point everyone will have to format dates in a web application.  I found some really cool tools for doing that.  They are Moment.js and Pikaday.js.
 <!-- more -->
+
 ![large](/img/backFuture.jpg)
 
 ### Moment.js
