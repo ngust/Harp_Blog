@@ -1,0 +1,110 @@
+<!DOCTYPE html><html><head><link rel="stylesheet" href="/main.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="shortcut icon" type="image/png" href="/favicon.png"></head><body><nav><a href="/">Home</a><a href="/about">About</a></nav><h2>Linux Tools - Conky</h2><!-- more -->
+<p>Conky is one of my favorite linux tools.  It displays information directly on your desktop.  The config file is simple to use and highly configurable.  Conky has developed a cult following among linux nerds.
+<!-- more --></p>
+<p><img src="/img/Conky/conky_bubbles.jpg" alt="large"></p>
+<p>You can display just about anything on conky.  It is most often used for displaying system information such as cpu usage, memory, disk space, network speed, etc.  You an run external scripts and bash commands too.  Conky can run in a window but the cool part is running it as part of your desktop.</p>
+<p>Conky has very well maintained code.  Check out the <a href="https://github.com/brndnmtthws/conky">github page</a>.  It has 3,116 commits, wow.  Conky got its name from a ventriloquist dummy on the TV show &quot;Trailer Park Boys&quot;.  Check out the video below to see some of his antics.</p>
+<iframe width="600" height="450" src="https://www.youtube.com/embed/ZuhN1fUCMBM" frameborder="0" allowfullscreen></iframe>
+
+<p>I&#39;ll show you how to set up Conky on your machine.  I&#39;m running Ubuntu, Lubuntu actually, but Conky is available on all linux distributions.</p>
+<p>To install on Ubuntu you run:</p>
+<pre><code>sudo apt-get install conky
+</code></pre><p>Typically you want to run conky in the background.  It&#39;s as simple as:</p>
+<pre><code>conky &amp;
+</code></pre><p>The &quot;&amp;&quot; forks it to the background.  The easiest way to close conky is:</p>
+<pre><code>killall conky
+</code></pre><p>The excitement takes place in the config file.  The default file is located at <code>/etc/conky/conky.conf</code>.  To work properly with all the cool looking stuff you need to create your own config file.  Start by copying the default to your home directory.  Like so:</p>
+<pre><code>cp /etc/conky/conky.conf /home/$USER/.conkyrc
+</code></pre><p>Then you can start editing, the default file is pretty user friendly and has numerous options commented out with #&#39;s.  You can just delete the # and enable the features that you want.  Over time, like most configurations in linux, you&#39;ll know what you want and slim down the file.</p>
+<p>Here&#39;s the options part of my .conkyrc with a screen shot on the side.</p>
+<p><img src="/img/Conky/my_conky_crop.png" alt="left"></p>
+<pre><code>background yes
+cpu_avg_samples 2
+net_avg_samples 2
+out_to_console no
+use_xft yes
+xftfont Bitstream Vera Sans Mono:size=8
+xftalpha 0.8
+mail_spool $MAIL
+update_interval 1
+own_window yes
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 400 5
+maximum_width 250
+draw_shades no
+draw_outline no
+draw_borders no
+stippled_borders 10
+border_width 0
+gap_x 15
+gap_y 30 
+alignment top_right
+use_spacer none
+no_buffers yes
+uppercase no
+</code></pre><p>The most important options are <code>background</code>, which runs Conky in the background.  <code>minimum_size</code> and <code>maximum_width</code> define the size on screen.  <code>own_window_transparent</code> makes the background transparent so it blends in to your desktop. </p>
+<p>Next is the &quot;code&quot; part of the config.  I&#39;ll break it into chunks for readability.  The first part defines the clock, cpu usage bars and process data.  It&#39;s pretty self explanatory.  You can define fonts, sizes, date formats and so on.</p>
+<pre><code>TEXT
+${hr 2}
+${alignc 19}${font Arial Black bold:size=22}${time %H:%M}${font}
+${voffset 2}${alignc}${time %A, %d %B %Y}
+${hr 2}
+${font bold:size=8}${color #FFFFFF}
+CPU
+${cpu cpu1}% ${color CCFF00}${cpubar cpu1}
+${color #FFFFFF}${cpu cpu2}% ${color #00FFFF}${cpubar cpu2}
+${color #FFFFFF}Load Av $alignr${loadavg}
+processes: $processes  $alignr running: $running_processes
+uptime: $uptime
+</code></pre><p>Next I define the memory usage bars and hard drive usage.  The bar heights are defined by this bit <code>${membar 15,200}</code> where height is 15 and length is 200 pixels.  You can easily pick the colors and mount points for dives to be used.</p>
+<pre><code> MEM: ${alignr}$mem / $memmax
+    ${color blue}${membar 15,200}
+${color #FFFFFF}SWAP: ${alignr}$swap / $swapmax 
+   ${color blue}${swapbar 15,200}
+${color #FFFFFF}Home   ${alignr}${fs_used /} / ${fs_size /}
+    ${fs_bar 8,200 /}
+ DATA   ${alignr}${fs_used /media/ng/DATA} / ${fs_size /media/ng/DATA}
+    ${fs_bar 8,200 /media/ng/DATA}
+ WIN ${alignr}${fs_used /media/ng/48F49F9AF49F8938} / ${fs_size /media/ng/48F49F9AF49F8938}
+    ${fs_bar 8,200 /media/ng/48F49F9AF49F8938}
+</code></pre><p>  The next section shows the most resouce expensive processes.  This is really helpful for me since I am running an old/slow laptop at the moment.  I just have to look at my desktop to see where the bottlenecks are.</p>
+<pre><code>cpu usage:  ${alignr}CPU%   
+ ${top name 1}  ${alignr}${top cpu 1}
+ ${top name 2}  ${alignr}${top cpu 2}
+ ${top name 3}  ${alignr}${top cpu 3}
+ ${top name 4}  ${alignr}${top cpu 4}
+
+mem usage:  ${alignr}MEM%   
+ ${top_mem name 1}  ${alignr}${top_mem mem 1}
+ ${top_mem name 2}  ${alignr}${top_mem mem 2}
+ ${top_mem name 3}  ${alignr}${top_mem mem 3}
+ ${top_mem name 4}  ${alignr}${top_mem mem 4}
+</code></pre><p>Next is the network section.  Simalr to the rest, except here I am running an external bash command.  That is executed by <code>${execi 600 ...</code>.  I&#39;m using w3m (terminal based browser) to scrape my external IP address from whatismyip.com.  You could do all kinds of stuff with this.  It is also great to have you internal and external IP address available at a glance.</p>
+<pre><code>NETWORK
+ hardline $alignr${addr eth0}
+ wireless $alignr${addr wlp4s0}
+ external $alignr${execi 600  w3m -no-cookie http://www.whatismyip.com/ | grep -A1 Is: | tail -n 1}
+ ng-server $alignr 70.69.246.142
+
+Download Speed $alignr${downspeedf wlp4s0} kb/s
+  ${color green}${downspeedgraph wlp4s0 15,200}
+${color #FFFFFF}Upload Speed $alignr${upspeedf wlp4s0} kb/s
+  ${color pink}${upspeedgraph wlp4s0 15,200}
+${color orange}
+</code></pre><p>My config is pretty straightforward.  You can get really creative with it.  You can run all kinds of scripts such as Ruby, Perl, Python or anything else.  I used to have one that would display a list of to-do items from file.</p>
+<p>There are some great examples of Conky config files at this link <a href="http://ubuntuforums.org/showthread.php?t=281865">ubuntuforums.org/showthread.php?t=281865</a></p>
+<p>Check out these cool Conky set ups that I found online.</p>
+<p><img src="/img/Conky/bloody.png" alt="sml">
+<img src="/img/Conky/circles.png" alt="sml">
+<img src="/img/Conky/karmic.png" alt="sml">
+<img src="/img/Conky/grass.png" alt="sml">
+<img src="/img/Conky/bb.png" alt="sml">
+<img src="/img/Conky/full.png" alt="sml"></p><footer id="footer-list"><p>Powered by <a target="_blank" href="http://harpjs.com">Harp.js</a>, <a target="_blank" href="http://jade-lang.com">jade</a> and <a target="_blank" href="http://lesscss.org">Less</a>.</p><ul><li><a target="_blank" href="https://github.com/ngust"><span class="fa fa-github"></a></span></li><li><a target="_blank" href="https://www.linkedin.com/in/nicholasgust"><span class="fa fa-linkedin"></a></span></li><li><a target="_blank" href="https://twitter.com/loopylettuce"><span class="fa fa-twitter"></a></span></li></ul><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-75817487-1', 'auto');
+  ga('send', 'pageview');</script></footer></body></html>

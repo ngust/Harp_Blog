@@ -1,21 +1,29 @@
 ## Linux Tools - Conky
 <!-- more -->
-Conky is one of my favorite linux tools.  It displays information directly on your desktop.  The config file is simple to use and highly configureable.  Conky has developed a cult following amoung linux nerds.
+Conky is one of my favorite linux tools.  It displays information directly on your desktop.  The config file is simple to use and highly configurable.  Conky has developed a cult following among linux nerds.
 <!-- more -->
 
 ![large](/img/Conky/conky_bubbles.jpg)
 
 You can display just about anything on conky.  It is most often used for displaying system information such as cpu usage, memory, disk space, network speed, etc.  You an run external scripts and bash commands too.  Conky can run in a window but the cool part is running it as part of your desktop.
 
-Conky has very well maintained code.  Check out the [github page](https://github.com/brndnmtthws/conky).  It has 3,116 commits, wow.  Conky got its name from a ventriloquist dummy on the TV show "Trailer Park Boys".  Check out the video below to see some of his anitcs.
+Conky has very well maintained code.  Check out the [github page](https://github.com/brndnmtthws/conky).  It has 3,116 commits, wow.  Conky got its name from a ventriloquist dummy on the TV show "Trailer Park Boys".  Check out the video below to see some of his antics.
 
 <iframe width="600" height="450" src="https://www.youtube.com/embed/ZuhN1fUCMBM" frameborder="0" allowfullscreen></iframe>
 
-I'll show you how to set up Conky on your machine.  I'm running Ubuntu, Lubuntu actually, but Conky is available on all linux distrubutions.
+I'll show you how to set up Conky on your machine.  I'm running Ubuntu, Lubuntu actually, but Conky is available on all linux distributions.
 
 To install on Ubuntu you run:
 
     sudo apt-get install conky
+
+Typically you want to run conky in the background.  It's as simple as:
+
+    conky &
+
+The "&" forks it to the background.  The easiest way to close conky is:
+
+    killall conky
 
 The excitement takes place in the config file.  The default file is located at `/etc/conky/conky.conf`.  To work properly with all the cool looking stuff you need to create your own config file.  Start by copying the default to your home directory.  Like so:
 
@@ -71,7 +79,7 @@ Next is the "code" part of the config.  I'll break it into chunks for readabilit
     processes: $processes  $alignr running: $running_processes
     uptime: $uptime
 
-Next I define the memory usage bars and hard drive usage.  The bar heights are defined by this bit `${membar 15,200}` where height is 15 and length is 200 pixels.  You can easily pick the colours and mount points for dives to be used.
+Next I define the memory usage bars and hard drive usage.  The bar heights are defined by this bit `${membar 15,200}` where height is 15 and length is 200 pixels.  You can easily pick the colors and mount points for dives to be used.
 
      MEM: ${alignr}$mem / $memmax
         ${color blue}${membar 15,200}
@@ -112,7 +120,7 @@ Next is the network section.  Simalr to the rest, except here I am running an ex
       ${color pink}${upspeedgraph wlp4s0 15,200}
     ${color orange}
 
-My config is pretty stratightforward.  You can get really creative with it.  You can run all kinds of scripts such as Ruby, Perl, Python or anything else.  I used to have one that would display a list of to-do items from file.
+My config is pretty straightforward.  You can get really creative with it.  You can run all kinds of scripts such as Ruby, Perl, Python or anything else.  I used to have one that would display a list of to-do items from file.
 
 There are some great examples of Conky config files at this link [ubuntuforums.org/showthread.php?t=281865](http://ubuntuforums.org/showthread.php?t=281865)
 
